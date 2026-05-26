@@ -1,0 +1,1 @@
+# Customer-Lifecycle-and-Revenue-Analytics-for-an-Online-Retail-using-SQL

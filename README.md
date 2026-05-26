@@ -1,7 +1,7 @@
 # Customer-Lifecycle-and-Revenue-Analytics-for-an-Online-Retail-using-SQL
 
 # 1. Business & Data Understanding
-# Phase 1 — Business & Data Understanding
+
 
 ## Business Problem
 

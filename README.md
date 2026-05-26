@@ -152,3 +152,39 @@ Definitions to be finalized include:
 * Customer Lifetime Value (CLV) methodology
 
 These definitions will establish analytical consistency across all subsequent phases of the project.
+
+## Success Metrics
+
+This project is considered successful if it delivers:
+
+* A reusable SQL analytical framework for customer lifecycle and revenue analysis
+* Reliable customer and revenue metrics derived from transactional data
+* Meaningful customer segmentation using RFM and behavioral analysis
+* Retention and churn insights that support business decision-making
+* Actionable recommendations based on customer and revenue patterns
+* A reproducible and well-documented analytical workflow
+
+---
+
+## Analytical Scope
+
+### Included Scope
+
+The project focuses on:
+
+* Customer lifecycle analytics
+* Revenue analytics
+* Customer segmentation
+* Cohort analysis
+* Customer retention and churn
+* Customer behavior and purchasing patterns
+* Customer value analysis (CLV)
+
+### Excluded Scope
+
+The following areas are outside the scope of this project:
+
+* Profitability analysis (cost information unavailable)
+* Marketing attribution analysis
+* Inventory analysis
+* Machine learning or predictive modeling

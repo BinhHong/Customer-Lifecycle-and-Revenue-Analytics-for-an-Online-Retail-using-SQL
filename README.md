@@ -17,6 +17,8 @@ Management requires deeper insight into customer purchasing patterns and their i
 
 The objective is to move beyond transactional reporting and develop a customer-centric analytical framework that supports business decision-making.
 
+
+Note: date 2009-12-01 07:45:00 to 2011-12-09 12:50:00
 ---
 
 ## Project Objectives
@@ -188,3 +190,16 @@ The following areas are outside the scope of this project:
 * Marketing attribution analysis
 * Inventory analysis
 * Machine learning or predictive modeling
+
+## Raw Data Setup
+
+A dedicated MySQL database was created to serve as the foundation for the analytical workflow. The Online Retail II dataset was imported into a raw staging table, preserving the original source data before any transformations or cleaning activities were performed.
+
+Key activities completed during this phase:
+
+* Created the project database (`online_retail_analysis`)
+* Imported the complete Online Retail II transactional dataset into a raw staging table
+* Validated import integrity through row-count and structure verification
+* Established a reproducible raw data layer to support subsequent data quality assessment and transformation processes
+
+This raw layer serves as the single source of truth throughout the project and remains unchanged during later analytical stages.

@@ -213,3 +213,9 @@ Key activities completed during this phase:
 * Established a reproducible raw data layer to support subsequent data quality assessment and transformation processes
 
 This raw layer serves as the single source of truth throughout the project and remains unchanged during later analytical stages.
+
+
+
+# To do next:
+- in 6: invalid prices, check with Stockcode 
+- correct words with missing and empty (e.g. misisng Descriptions or empty Desc?) right from the start

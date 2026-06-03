@@ -219,3 +219,4 @@ This raw layer serves as the single source of truth throughout the project and r
 # To do next:
 - in 6: invalid prices, check with Stockcode (done)
 - correct words with missing and empty (e.g. misisng Descriptions or empty Desc?) right from the start (done)
+- 01 data quality: step 4 fertig

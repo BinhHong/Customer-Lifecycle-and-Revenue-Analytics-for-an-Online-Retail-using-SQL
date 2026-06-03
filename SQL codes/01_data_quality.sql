@@ -1,50 +1,45 @@
 /*
-
 This script profiles the raw Online Retail II dataset before cleaning and modeling.
 The objective is to identify data quality issues that may affect customer-level,
-revenue-level, and lifecycle analytics.
-
-Important:
-This script does not clean or modify data. It only audits the raw import.
+revenue-level, and lifecycle analytics. Note that this does not include cleaning or modifying data.
+Steps needed:
+- 1. Dataset Overview
+- 2. Missing Values
+- 3. Duplicate Records
+- 4. Cancellation and Negative Quantity
+- 5. Price Validation
+- 6. Description profiling
+- 7. Customer Id's Quality
+- 8. Outliers Assessment
 */
 
 USE online_retail_analysis;
-
 
 /* ============================================================
    1. Dataset Overview
    ============================================================ */
    
--- Check: Total number of transaction rows.
--- Purpose: Validate dataset size after raw import.
+-- Check the total number of transaction rows to validate dataset size after raw import.
 -- Result: 1,067,371 rows.
 SELECT COUNT(*) AS total_rows
 FROM raw_online_retail;
 
-
--- Check: Number of unique invoices.
--- Purpose: Estimate transaction/order volume.
+-- Examine the number of unique invoices.
 -- Result: 53,628 unique invoices.
 SELECT COUNT(DISTINCT Invoice) AS unique_invoices
 FROM raw_online_retail;
 
-
--- Check: Number of unique products.
--- Purpose: Estimate product variety in the dataset.
+-- Check the number of unique products.
 -- Result: 5,132 unique stock codes.
 SELECT COUNT(DISTINCT StockCode) AS unique_products
 FROM raw_online_retail;
 
-
--- Check: Number of unique customer identifiers.
--- Purpose: Estimate identifiable customer base.
+-- Inspect the number of unique customer ids
 -- Result: 5,943 unique customer identifiers.
 SELECT COUNT(DISTINCT Customer_ID) AS unique_customers
 FROM raw_online_retail;
 
-
--- Check: Transaction date range.
--- Purpose: Confirm dataset coverage period.
+-- Investigate the transaction date range.
 -- Result: 2009-12-01 07:45:00 to 2011-12-09 12:50:00.
 SELECT
     MIN(InvoiceDate) AS first_invoice_date,
@@ -52,13 +47,11 @@ SELECT
 FROM raw_online_retail;
 
 
-
 /* ============================================================
    2. Missing Values
    ============================================================ */
 
--- Check: NULL values and blank strings across all columns.
--- Purpose: Distinguish true SQL NULL values from blank strings imported from CSV.
+-- Investigate NULL values and blank strings across all columns.
 -- Result: No SQL NULL values found, 4,382 blank descriptions and 243,007 blank customer identifiers.
 SELECT
     SUM(Invoice IS NULL) AS null_invoice,
@@ -87,22 +80,27 @@ SELECT
 FROM raw_online_retail;
 
 
-
 /* ============================================================
-   3. Duplicate Record Assessment
+   3. Duplicate Records
    ============================================================ */
 
--- Check: Exact duplicate groups across all raw columns.
--- Purpose: Identify repeated transaction rows that may inflate revenue and customer metrics.
+-- Examine exact duplicate groups across all raw columns.
 -- Result: 32,907 duplicate groups.
-SELECT Invoice, StockCode, Description, Quantity, InvoiceDate, Price, Customer_ID, Country, COUNT(*) AS duplicate_count
+SELECT 
+	Invoice,
+    StockCode, 
+    Description, 
+    Quantity, 
+    InvoiceDate, 
+    Price, 
+    Customer_ID, 
+    Country, 
+    COUNT(*) AS duplicate_count
 FROM raw_online_retail
 GROUP BY Invoice, StockCode, Description, Quantity, InvoiceDate, Price, Customer_ID, Country
 HAVING COUNT(*) > 1;
 
-
--- Check: Number of redundant duplicate rows beyond the first occurrence.
--- Purpose: Estimate the scale of duplication requiring treatment during cleaning.
+-- Check the number of redundant duplicate rows beyond the first occurrence.
 -- Result: 34,335 duplicate rows.
 SELECT SUM(duplicate_count - 1) AS duplicate_rows
 FROM (
@@ -121,52 +119,43 @@ FROM (
 ) AS duplicate_groups;
 
 
-
 /* ============================================================
-   4. Cancellation and Negative Quantity Assessment
+   4. Cancellation and Negative Quantity
    ============================================================ */
 
--- Check: Cancellation records identified by invoice prefix 'C'.
--- Purpose: Quantify transactions explicitly marked as cancellations.
+-- Check the cancellation records which are marked with prefix 'C' in invoice.
 -- Result: 19,494 cancellation records.
-SELECT COUNT(*) AS cancellation_rows
+SELECT COUNT(*) AS cancellation_transactions
 FROM raw_online_retail
 WHERE Invoice LIKE 'C%';
 
-
--- Check: Records with negative quantities.
--- Purpose: Identify returns, cancellations, or adjustment transactions.
+-- Examine the records with negative quantities
 -- Result: 22,950 rows with negative quantities.
-SELECT COUNT(*) AS negative_quantity_rows
+SELECT COUNT(*) AS negative_quantity_transactions
 FROM raw_online_retail
 WHERE CAST(Quantity AS SIGNED) < 0;
 
-
--- Check: Cancellation records that also have negative quantities.
--- Purpose: Validate whether cancellation invoices consistently use negative quantities.
+-- Check the cancellation records that also have negative quantities
+-- Purpose: validate whether cancellation invoices consistently come with negative quantities.
 -- Result: 19,493 rows.
-SELECT COUNT(*) AS cancelled_negative_quantity_rows
+SELECT COUNT(*) AS cancelled_negative_quantity_transactions
 FROM raw_online_retail
 WHERE Invoice LIKE 'C%'
   AND CAST(Quantity AS SIGNED) < 0;
-
-
--- Check: Negative quantities without cancellation invoice prefix.
--- Purpose: Identify returns or adjustments not explicitly marked as cancellation invoices.
--- Result: 3,457 rows.
-SELECT COUNT(*) AS negative_quantity_without_cancellation_rows
-FROM raw_online_retail
-WHERE Invoice NOT LIKE 'C%'
-  AND CAST(Quantity AS SIGNED) < 0;
-
-
--- Check: Cancellation invoices with non-negative quantities.
--- Purpose: Identify exceptions to the expected cancellation pattern.
+  
+-- Find the cancellation invoices with non-negative quantities.
 -- Result: 1 row; StockCode = 'M', Description = 'Manual'.
 SELECT *
 FROM raw_online_retail
 WHERE Invoice LIKE 'C%'
   AND CAST(Quantity AS SIGNED) >= 0;
+
+-- Examine negative quantities without cancellation invoice prefix.
+-- Result: 3,457 rows.
+SELECT COUNT(*) AS negative_quantity_without_cancellation_transactions
+FROM raw_online_retail
+WHERE Invoice NOT LIKE 'C%'
+  AND CAST(Quantity AS SIGNED) < 0;
 
 
 
@@ -238,7 +227,7 @@ GROUP BY StockCode;
 
 
 /* ============================================================
-   6. Description Quality
+   6. Description profiling
    ============================================================ */
 
 -- Check: Description missingness type.
@@ -283,7 +272,7 @@ ORDER BY rows_count DESC;
 
 
 /* ============================================================
-   7. Customer Identifier Quality
+   7. Customer Id's Quality
    ============================================================ */
 
 -- Check: Blank customer identifiers.
@@ -297,7 +286,7 @@ WHERE Customer_ID IS NULL
 
 
 /* ============================================================
-   8. Business Outlier Assessment
+   8. Outliers Assessment
    ============================================================ */
 
 -- Check: Largest quantity values.

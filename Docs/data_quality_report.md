@@ -14,7 +14,7 @@ A total of **32,907 duplicate groups** were identified, corresponding to **34,33
 
 The dataset contains **19,494 cancellation records** and **22,950 records with negative quantities**. Investigation revealed that **19,493 cancellation records** were associated with negative quantities. One exceptional record was identified as a manual transaction (`StockCode = 'M'`) with a positive quantity.
 
-Additionally, **3,457 records** contained negative quantities without a corresponding cancellation invoice, suggesting the presence of returns, adjustments, or other non-standard transaction types.
+Additionally, **3,457** records contained negative quantities without a cancellation invoice prefix. Description-level inspection showed that these records are primarily linked to operational and inventory-related events such as damages, missing stock, stock checks, dotcom/Amazon set issues, and manual adjustments. These records should therefore be treated as non-standard operational adjustments rather than normal customer returns.
 
 ## Price Validation
 
@@ -22,7 +22,7 @@ A total of **6,225 records** contained non-positive prices, including **6,220 ze
 
 Zero-price transactions were distributed across normal product stock codes rather than being concentrated in administrative records. These transactions may represent promotional, complimentary, replacement, or bundled items rather than data-entry errors.
 
-The five negative-price transactions represent a negligible proportion of the dataset and are likely associated with corrections or accounting adjustments.
+The five negative-price transactions represent a negligible proportion of the dataset and are associated with **Stockcode = "B"** and **Description = "Adjust bad debt"**. They are likely related to corrections or accounting adjustments.
 
 ## Description Quality
 

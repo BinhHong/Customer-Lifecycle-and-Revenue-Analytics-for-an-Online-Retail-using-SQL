@@ -165,7 +165,6 @@ WHERE Invoice NOT LIKE 'C%'
   AND CAST(Quantity AS SIGNED) < 0;
 
 
-
 /* ============================================================
    5. Price Validation
    ============================================================ */
@@ -188,7 +187,7 @@ WHERE CAST(Price AS DECIMAL(10,2)) <= 0
 GROUP BY price_type;
 
 -- Investigate the negative prices.
--- Result: they are all associated with StockCode B, Description "Adjust bad debt" and Customer IDs are blank.
+-- Result: they are all associated with StockCode "B", Description "Adjust bad debt" and Customer IDs are blank.
 SELECT *
 FROM raw_online_retail
 WHERE CAST(Price AS DECIMAL(10,2)) < 0;
@@ -199,20 +198,23 @@ SELECT *
 FROM raw_online_retail
 WHERE StockCode = "B";
 
--- Check: Description patterns among zero-price records.
--- Purpose: Inspect whether zero-price rows are linked to specific products or operational records.
+-- Check Invoices with prefix "A".
+-- Result: this produces the same result as query with Stockcode = "B".
+SELECT *
+FROM raw_online_retail
+WHERE Invoice LIKE "A%";
+
+-- Check description patterns among zero-price records.
+-- Inspect whether zero-price rows are linked to specific products or operational records.
 SELECT
     Description,
     COUNT(*) AS rows_count
 FROM raw_online_retail
 WHERE CAST(Price AS DECIMAL(10,2)) = 0
 GROUP BY Description
-ORDER BY rows_count DESC
-LIMIT 20;
+ORDER BY rows_count DESC;
 
-
--- Check: StockCode distribution among zero-price records.
--- Purpose: Determine whether zero-price rows are concentrated in a few administrative stock codes.
+-- Investigate StockCode distribution among zero-price records.
 -- Finding: Zero-price rows are distributed across normal product stock codes.
 SELECT
     StockCode,
@@ -222,9 +224,7 @@ WHERE CAST(Price AS DECIMAL(10,2)) = 0
 GROUP BY StockCode
 ORDER BY rows_count DESC;
 
-
--- Check: Price range for selected stock codes that frequently appear with zero price.
--- Purpose: Verify whether these stock codes also appear with positive prices.
+-- Check price range for selected stock codes that frequently appear with zero price.
 -- Finding: Selected stock codes have both zero and positive prices, suggesting valid products with occasional zero-price entries.
 SELECT
     StockCode,
@@ -239,13 +239,11 @@ WHERE StockCode IN (
 GROUP BY StockCode;
 
 
-
 /* ============================================================
    6. Description profiling
    ============================================================ */
 
--- Check: Description missingness type.
--- Purpose: Confirm whether missing descriptions are stored as SQL NULL or blank strings.
+-- Examine the missingness type of descriptions
 -- Result: 4,382 blank descriptions and 0 NULL descriptions.
 SELECT
     CASE
@@ -258,8 +256,7 @@ WHERE Description IS NULL
    OR TRIM(Description) = ''
 GROUP BY description_type;
 
-
--- Check: Non-standard operational descriptions.
+-- Check the non-standard operational descriptions.
 -- Purpose: Inspect descriptions that may represent inventory, operational, or administrative records.
 SELECT
     Description,
@@ -284,38 +281,48 @@ GROUP BY Description
 ORDER BY rows_count DESC;
 
 
-
 /* ============================================================
    7. Customer Id's Quality
    ============================================================ */
 
--- Check: Blank customer identifiers.
--- Purpose: Quantify transaction rows that cannot support customer-level analytics.
--- Result: 243,007 transaction rows with blank customer identifiers.
-SELECT COUNT(*) AS blank_customer_id_rows
+-- Count the NULL or blank customer IDs.
+-- Result: 243,007 blank transaction rows.
+SELECT
+	CASE
+		WHEN Customer_ID IS NULL THEN "null"
+        WHEN TRIM(Customer_ID) = "" THEN "blank"
+	END AS customer_ID_missing_type,
+    COUNT(*) AS count
 FROM raw_online_retail
-WHERE Customer_ID IS NULL
-   OR TRIM(Customer_ID) = '';
-
+WHERE Customer_ID IS NULL OR TRIM(Customer_ID) = ""
+GROUP BY customer_ID_missing_type;
 
 
 /* ============================================================
-   8. Outliers Assessment
+   8. Outliers
    ============================================================ */
 
--- Check: Largest quantity values.
--- Purpose: Identify extreme quantity transactions and assess potential wholesale behavior or data issues.
+-- Check the largest quantity values.
 -- Finding: Top quantities range from 7,128 to 80,995 units.
 SELECT *
 FROM raw_online_retail
 ORDER BY CAST(Quantity AS SIGNED) DESC
 LIMIT 20;
 
-
--- Check: Largest unit price values.
--- Purpose: Identify extreme price records and separate product sales from financial/administrative transactions.
+-- Check the largest unit price values.
 -- Finding: Extreme prices are associated mainly with 'M', 'AMAZONFEE', 'BANK CHARGES', and bad debt adjustments.
 SELECT *
 FROM raw_online_retail
 ORDER BY CAST(Price AS DECIMAL(10,2)) DESC
 LIMIT 20;
+
+-- test theory
+SELECT *
+FROM raw_online_retail
+WHERE StockCode REGEXP '^[A-Za-z]+$';
+
+SELECT StockCode, COUNT(*) AS count
+FROM raw_online_retail
+WHERE StockCode REGEXP '^[A-Za-z]+$'
+GROUP BY StockCode
+ORDER BY count DESC;

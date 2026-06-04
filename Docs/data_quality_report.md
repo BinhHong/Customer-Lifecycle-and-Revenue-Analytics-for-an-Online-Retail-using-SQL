@@ -2,13 +2,13 @@
 
 ## Missing Values
 
-No SQL `NULL` values were found in the raw import. Missingness appears as blank strings. The dataset contains **4,382 blank product descriptions** and **243,007 blank customer identifiers**.
+No `NULL` values were found in the raw data, missing information appears as blank strings. The dataset contains **4,382 blank product descriptions** and **243,007 blank customer IDs**.
 
-Blank customer identifiers represent approximately **22.8% of all transaction records** and will affect customer-level analyses such as RFM segmentation, cohort analysis, retention, churn, customer lifetime, and CLV.
+Blank customer IDs represent approximately **22.8%** of all transaction records and will affect customer-level analyses such as RFM segmentation, cohort analysis, retention, churn, customer lifetime, and CLV.
 
 ## Duplicate Records
 
-A total of **32,907 duplicate groups** were identified, corresponding to **34,335 redundant duplicate records** (**3.22% of all observations**). Duplicate records have the potential to inflate revenue, order frequency, and customer-level metrics and will therefore be reviewed during the cleaning phase.
+A total of **32,907 duplicate groups** were identified, corresponding to **34,335 redundant duplicate records**, which account for **3.22% of all observations**. Duplicate records pose a risk of inflating revenue, order frequency, and customer-level metrics and will therefore be reviewed during the cleaning phase.
 
 ## Cancellation and Return Transactions
 
@@ -22,7 +22,7 @@ A total of **6,225 records** contained non-positive prices, including **6,220 ze
 
 Zero-price transactions were distributed across normal product stock codes rather than being concentrated in administrative records. These transactions may represent promotional, complimentary, replacement, or bundled items rather than data-entry errors.
 
-The five negative-price transactions represent a negligible proportion of the dataset and are associated with **Stockcode = "B"** and **Description = "Adjust bad debt"**. They are likely related to corrections or accounting adjustments.
+The five negative-price transactions represent a negligible proportion of the dataset and are associated with **Stockcode = "B"** and **Description = "Adjust bad debt"**. They are likely related to corrections or accounting adjustments. Interestingly, they are also corresponding to Invoices with prefix "A".
 
 ## Description Quality
 
@@ -30,9 +30,9 @@ A total of **4,382 records** contained blank product descriptions. Additional in
 
 These records indicate that the dataset contains operational, inventory-related, and administrative activities in addition to standard retail sales transactions.
 
-## Customer Identifier Quality
+## Customer ID Quality
 
-A total of **243,007 transaction records** contained blank customer identifiers. While these records remain usable for transaction-level and revenue-level analysis, they cannot be used for customer-level analytics and may require separate treatment during the cleaning phase.
+A total of **243,007 transaction records** contained blank customer IDs. While these records remain usable for transaction-level and revenue-level analysis, they cannot be used for customer-level analytics and may require separate treatment during the cleaning phase.
 
 ## Business Outliers
 

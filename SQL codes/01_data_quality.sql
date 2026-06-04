@@ -156,23 +156,26 @@ SELECT COUNT(*) AS negative_quantity_without_cancellation_transactions
 FROM raw_online_retail
 WHERE Invoice NOT LIKE 'C%'
   AND CAST(Quantity AS SIGNED) < 0;
+  
+-- Check the descriptions of records with negative quantities
+-- Result: typical descriptions include "missing", "lost", "damaged", "bad", "can't find", "wrong", "Dotcom", "?"
+SELECT *
+FROM raw_online_retail
+WHERE Invoice NOT LIKE 'C%'
+  AND CAST(Quantity AS SIGNED) < 0;
 
 
 
 /* ============================================================
    5. Price Validation
    ============================================================ */
+   
+-- Examine the price range
+-- Result: min price is -53594.36 and max price is 38970.00
+SELECT MIN(CAST(Price AS DECIMAL(10,2))) AS min_price, MAX(CAST(Price AS DECIMAL(10,2))) AS max_price
+FROM raw_online_retail;
 
--- Check: Records with non-positive prices.
--- Purpose: Identify zero-price and negative-price transactions requiring review.
--- Result: 6,225 records.
-SELECT COUNT(*) AS non_positive_price_rows
-FROM raw_online_retail
-WHERE CAST(Price AS DECIMAL(10,2)) <= 0;
-
-
--- Check: Breakdown of zero-price and negative-price records.
--- Purpose: Separate potentially promotional or complimentary transactions from invalid/correction records.
+-- Check the records with non-positive prices.
 -- Result: 6,220 zero-price rows and 5 negative-price rows.
 SELECT
     CASE
@@ -184,6 +187,17 @@ FROM raw_online_retail
 WHERE CAST(Price AS DECIMAL(10,2)) <= 0
 GROUP BY price_type;
 
+-- Investigate the negative prices.
+-- Result: they are all associated with StockCode B, Description "Adjust bad debt" and Customer IDs are blank.
+SELECT *
+FROM raw_online_retail
+WHERE CAST(Price AS DECIMAL(10,2)) < 0;
+
+-- Check the records with Stockcode = "B".
+-- Result: beside the negative price rows, there is also a record with positive price and blank Customer ID.
+SELECT *
+FROM raw_online_retail
+WHERE StockCode = "B";
 
 -- Check: Description patterns among zero-price records.
 -- Purpose: Inspect whether zero-price rows are linked to specific products or operational records.

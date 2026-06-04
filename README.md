@@ -219,4 +219,8 @@ This raw layer serves as the single source of truth throughout the project and r
 # To do next:
 - in 6: invalid prices, check with Stockcode (done)
 - correct words with missing and empty (e.g. misisng Descriptions or empty Desc?) right from the start (done)
-- 01 data quality: step 4 fertig
+- 01 data quality: step 4 fertig (done)
+- Description: what does B mean? they are all associated with negative Prices, Description "Adjust bad debt" and Customer IDs are blank.
+- what does StockCode = 'M', Description = 'Manual' mean? they are in the only row with C invoice (meaning cancellation) and negative quantity.
+- kha nang cao la nen kiem tra cac Stockcode toan letters, khong co so
+- sua lai 1 ti Phase 4 data cleaning: nicht mehr "return" but "negative quantity", 

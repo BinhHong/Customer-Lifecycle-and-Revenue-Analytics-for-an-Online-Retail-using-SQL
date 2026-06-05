@@ -34,17 +34,31 @@ These records indicate that the dataset contains operational, inventory-related,
 
 A total of **243,007 transaction records** contained blank customer IDs. While these records remain usable for transaction-level and revenue-level analysis, they cannot be used for customer-level analytics and may require separate treatment during the cleaning phase.
 
+## StockCode Structure
+
+Although the dataset documentation describes `StockCode` as a unique 5-digit product ID, multiple StockCode formats were identified, including product variants, administrative codes, shipping charges, gift vouchers, adjustment records, and test transactions.
+
+This finding indicates that the dataset contains both retail sales and operational/accounting activities. Non-product StockCodes will be classified separately during the cleaning phase.
+
+## Country Value
+
+Several non-standard country values were identified, including `EIRE`, `RSA`, `European Community`, `Channel Islands`, `West Indies`, and `Unspecified`.
+
+These values appear to represent valid business locations or regional groupings rather than data-entry errors. No country values were modified during the data quality assessment.
+
 ## Business Outliers
 
 Several extreme quantity observations were identified. Many were associated with low-cost products and customers exhibiting wholesale purchasing behavior, which is consistent with the dataset description. Quantity outliers therefore cannot automatically be classified as data quality issues.
 
 Extreme price outliers were primarily linked to non-product stock codes such as `M`, `AMAZONFEE`, `BANK CHARGES`, and bad debt adjustments. These records represent financial or administrative transactions rather than customer purchases and should be evaluated separately during the cleaning phase.
 
+
 ## Key Implications for Data Cleaning
 
-The data quality assessment identified four major areas requiring treatment during the cleaning phase:
+The data quality assessment identified five major areas requiring treatment during the cleaning phase:
 
 1. Removal of redundant duplicate records.
-2. Separation of cancellations, returns, and standard sales transactions.
-3. Treatment of blank customer identifiers for customer-level analyses.
-4. Identification and exclusion of administrative and financial adjustment records from retail sales analytics.
+2. Separation of cancellation transactions, negative-quantity records, and standard sales transactions.
+3. Standardization of blank descriptions and blank customer IDs as `NULL` values.
+4. Classification of non-product StockCodes such as shipping charges, gift vouchers, test records, administrative records, and financial adjustments.
+5. Preservation of legitimate wholesale-like transactions while excluding operational/accounting records from core retail sales analytics.

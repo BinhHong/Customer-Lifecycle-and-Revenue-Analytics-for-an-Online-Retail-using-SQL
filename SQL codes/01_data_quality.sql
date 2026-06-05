@@ -298,6 +298,66 @@ WHERE Customer_ID IS NULL OR TRIM(Customer_ID) = ""
 GROUP BY customer_ID_missing_type;
 
 
+
+/* ============================================
+   8. StockCode Overview
+   ============================================ */
+   
+-- Check StockCode types
+-- Result: 932385 codes with 5 digits, 128893 codes with 5 digits and some letters, 5477 codes with only letters and 616 other codes
+SELECT
+    CASE
+        WHEN TRIM(StockCode) REGEXP '^[0-9]{5}$'
+            THEN '5 digits'
+
+        WHEN TRIM(StockCode) REGEXP '^[0-9]{5}[A-Za-z]+$'
+            THEN '5 digits + letters'
+
+        WHEN TRIM(StockCode) REGEXP '^[A-Za-z]+$'
+            THEN 'Letters only'
+
+        ELSE 'Other'
+    END AS stockcode_type,
+    COUNT(*) AS cnt
+FROM raw_online_retail
+GROUP BY stockcode_type;
+
+-- Check StockCode marked with "Other"
+WITH sc_type AS (
+	SELECT
+		*,
+		CASE
+			WHEN TRIM(StockCode) REGEXP '^[0-9]{5}$'
+				THEN '5 digits'
+
+			WHEN TRIM(StockCode) REGEXP '^[0-9]{5}[A-Za-z]+$'
+				THEN '5 digits + letters'
+
+			WHEN TRIM(StockCode) REGEXP '^[A-Za-z]+$'
+				THEN 'Letters only'
+
+			ELSE 'Other'
+		END AS stockcode_type
+	FROM raw_online_retail
+)
+
+SELECT *
+FROM sc_type
+WHERE stockcode_type = "Other";
+
+
+
+/* ==================================================
+   9. Country Profiling
+   ================================================== */
+
+-- Examine Country
+-- Result: Some non-standard country values were identified:`EIRE`, `RSA`, `European Community`, `Channel Islands`, `West Indies`, and `Unspecified`.
+SELECT DISTINCT Country
+FROM raw_online_retail;
+
+
+
 /* ============================================================
    8. Outliers
    ============================================================ */
@@ -315,14 +375,3 @@ SELECT *
 FROM raw_online_retail
 ORDER BY CAST(Price AS DECIMAL(10,2)) DESC
 LIMIT 20;
-
--- test theory
-SELECT *
-FROM raw_online_retail
-WHERE StockCode REGEXP '^[A-Za-z]+$';
-
-SELECT StockCode, COUNT(*) AS count
-FROM raw_online_retail
-WHERE StockCode REGEXP '^[A-Za-z]+$'
-GROUP BY StockCode
-ORDER BY count DESC;

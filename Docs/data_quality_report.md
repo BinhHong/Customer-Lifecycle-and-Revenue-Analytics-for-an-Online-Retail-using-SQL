@@ -36,7 +36,7 @@ A total of **243,007 transaction records** contained blank customer IDs. While t
 
 ## StockCode Structure
 
-Although the dataset documentation describes `StockCode` as a unique 5-digit product ID, multiple StockCode formats were identified, including product variants, administrative codes, shipping charges, gift vouchers, adjustment records, and test transactions.
+Although the dataset documentation describes `StockCode` as a unique 5-digit product ID, multiple StockCode formats were identified, including product variants, administrative codes, shipping charges, gift vouchers, adjustment records, and test transactions like `M`, `BANK CHARGES`, `AMAZONFEE`, `gift_0001_20`, `C2`, `C3`, `TEST001`, `ADJUST2`.
 
 This finding indicates that the dataset contains both retail sales and operational/accounting activities. Non-product StockCodes will be classified separately during the cleaning phase.
 

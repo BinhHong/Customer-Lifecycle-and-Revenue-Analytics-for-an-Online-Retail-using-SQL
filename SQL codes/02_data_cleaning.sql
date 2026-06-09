@@ -46,7 +46,7 @@ FROM raw_online_retail_dedup;
 DROP TABLE IF EXISTS clean_online_retail;
 
 -- create the clean online retail table
-CREATE TABLE clean_online_retail AS
+CREATE TABLE clean_online_retail
 SELECT
     -- Invoice and Stockcode
     Invoice AS invoice_no,

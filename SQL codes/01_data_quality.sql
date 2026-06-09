@@ -301,6 +301,15 @@ FROM raw_online_retail
 WHERE Customer_ID IS NULL OR TRIM(Customer_ID) = ""
 GROUP BY customer_ID_missing_type;
 
+-- check Customer ID and Country
+-- Result: 13 customers have at least 2 countries
+SELECT
+    customer_id,
+    COUNT(DISTINCT country) AS country_count
+FROM clean_online_retail
+WHERE customer_id IS NOT NULL
+GROUP BY customer_id
+HAVING COUNT(DISTINCT country) > 1;
 
 
 /* ============================================

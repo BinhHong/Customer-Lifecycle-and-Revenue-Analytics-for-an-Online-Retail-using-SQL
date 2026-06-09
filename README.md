@@ -214,7 +214,19 @@ Key activities completed during this phase:
 
 This raw layer serves as the single source of truth throughout the project and remains unchanged during later analytical stages.
 
+## Data Model
 
+A star schema was implemented to support customer lifecycle analytics.
+
+- fact_transactions stores transaction-level records.
+- dim_customers stores customer attributes.
+- dim_products stores product attributes.
+- dim_date supports time-based analysis and cohort calculations.
+
+Relationships:
+- dim_customers → fact_transactions
+- dim_products → fact_transactions
+- dim_date → fact_transactions
 
 # To do next:
 - in 6: invalid prices, check with Stockcode (done)

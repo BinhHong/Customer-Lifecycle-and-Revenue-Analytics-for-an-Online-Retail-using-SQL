@@ -4,13 +4,15 @@ The objective is to identify data quality issues that may affect customer-level,
 revenue-level, and lifecycle analytics. Note that this does not include cleaning or modifying data.
 Steps needed:
 - 1. Dataset Overview
-- 2. Missing Values
-- 3. Duplicate Records
+- 2. Duplicate Records
+- 3. Missing Values
 - 4. Cancellation and Negative Quantity
 - 5. Price Validation
 - 6. Description profiling
 - 7. Customer Id's Quality
-- 8. Outliers Assessment
+- 8. StockCode Profiling
+- 9. Country Profiling
+- 10. Quantity and Price Outliers
 */
 
 USE online_retail_analysis;
@@ -48,40 +50,7 @@ FROM raw_online_retail;
 
 
 /* ============================================================
-   2. Missing Values
-   ============================================================ */
-
--- Investigate NULL values and blank strings across all columns.
--- Result: No SQL NULL values found, 4,382 blank descriptions and 243,007 blank customer identifiers.
-SELECT
-    SUM(Invoice IS NULL) AS null_invoice,
-    SUM(TRIM(Invoice) = '') AS blank_invoice,
-
-    SUM(StockCode IS NULL) AS null_stockcode,
-    SUM(TRIM(StockCode) = '') AS blank_stockcode,
-
-    SUM(Description IS NULL) AS null_description,
-    SUM(TRIM(Description) = '') AS blank_description,
-
-    SUM(Quantity IS NULL) AS null_quantity,
-    SUM(TRIM(Quantity) = '') AS blank_quantity,
-
-    SUM(InvoiceDate IS NULL) AS null_invoice_date,
-    SUM(TRIM(InvoiceDate) = '') AS blank_invoice_date,
-
-    SUM(Price IS NULL) AS null_price,
-    SUM(TRIM(Price) = '') AS blank_price,
-
-    SUM(Customer_ID IS NULL) AS null_customer_id,
-    SUM(TRIM(Customer_ID) = '') AS blank_customer_id,
-
-    SUM(Country IS NULL) AS null_country,
-    SUM(TRIM(Country) = '') AS blank_country
-FROM raw_online_retail;
-
-
-/* ============================================================
-   3. Duplicate Records
+   2. Duplicate Records
    ============================================================ */
 
 -- Examine exact duplicate groups across all raw columns.
@@ -117,6 +86,41 @@ FROM (
         Country
     HAVING COUNT(*) > 1
 ) AS duplicate_groups;
+
+
+
+/* ============================================================
+   3. Missing Values
+   ============================================================ */
+
+-- Investigate NULL values and blank strings across all columns.
+-- Result: No NULL values found, 4,382 blank descriptions and 243,007 blank customer identifiers.
+SELECT
+    SUM(Invoice IS NULL) AS null_invoice,
+    SUM(TRIM(Invoice) = '') AS blank_invoice,
+
+    SUM(StockCode IS NULL) AS null_stockcode,
+    SUM(TRIM(StockCode) = '') AS blank_stockcode,
+
+    SUM(Description IS NULL) AS null_description,
+    SUM(TRIM(Description) = '') AS blank_description,
+
+    SUM(Quantity IS NULL) AS null_quantity,
+    SUM(TRIM(Quantity) = '') AS blank_quantity,
+
+    SUM(InvoiceDate IS NULL) AS null_invoice_date,
+    SUM(TRIM(InvoiceDate) = '') AS blank_invoice_date,
+
+    SUM(Price IS NULL) AS null_price,
+    SUM(TRIM(Price) = '') AS blank_price,
+
+    SUM(Customer_ID IS NULL) AS null_customer_id,
+    SUM(TRIM(Customer_ID) = '') AS blank_customer_id,
+
+    SUM(Country IS NULL) AS null_country,
+    SUM(TRIM(Country) = '') AS blank_country
+FROM raw_online_retail;
+
 
 
 /* ============================================================
@@ -282,7 +286,7 @@ ORDER BY rows_count DESC;
 
 
 /* ============================================================
-   7. Customer Id's Quality
+   7. Customer ID Quality
    ============================================================ */
 
 -- Count the NULL or blank customer IDs.
@@ -300,7 +304,7 @@ GROUP BY customer_ID_missing_type;
 
 
 /* ============================================
-   8. StockCode Overview
+   8. StockCode Profiling
    ============================================ */
    
 -- Check StockCode types
@@ -343,7 +347,30 @@ WITH sc_type AS (
 
 SELECT *
 FROM sc_type
-WHERE stockcode_type = "Other";
+WHERE stockcode_type = 'Other';
+
+-- Check StockCode marked with "Letters only"
+WITH sc_type AS (
+	SELECT
+		*,
+		CASE
+			WHEN TRIM(StockCode) REGEXP '^[0-9]{5}$'
+				THEN '5 digits'
+
+			WHEN TRIM(StockCode) REGEXP '^[0-9]{5}[A-Za-z]+$'
+				THEN '5 digits + letters'
+
+			WHEN TRIM(StockCode) REGEXP '^[A-Za-z]+$'
+				THEN 'Letters only'
+
+			ELSE 'Other'
+		END AS stockcode_type
+	FROM raw_online_retail
+)
+
+SELECT *
+FROM sc_type
+WHERE stockcode_type = "Letters only";
 
 
 
@@ -359,7 +386,7 @@ FROM raw_online_retail;
 
 
 /* ============================================================
-   8. Outliers
+   10. Quantity and Price Outliers
    ============================================================ */
 
 -- Check the largest quantity values.

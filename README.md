@@ -224,3 +224,4 @@ This raw layer serves as the single source of truth throughout the project and r
 - what does StockCode = 'M', Description = 'Manual' mean? they are in the only row with C invoice (meaning cancellation) and negative quantity.
 - kha nang cao la nen kiem tra cac Stockcode toan letters, khong co so. Kha nang chi co 3 loai: 5 chu so, 5 chu so va 1 letter, toan letter?
 - Nho no: sua lai 1 ti Phase 4 data cleaning: nicht mehr "return" but "negative quantity", 
+6. data model.sql xong nhung chua chay

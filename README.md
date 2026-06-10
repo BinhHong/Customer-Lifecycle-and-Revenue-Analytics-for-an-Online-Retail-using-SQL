@@ -236,4 +236,15 @@ Relationships:
 - what does StockCode = 'M', Description = 'Manual' mean? they are in the only row with C invoice (meaning cancellation) and negative quantity.
 - kha nang cao la nen kiem tra cac Stockcode toan letters, khong co so. Kha nang chi co 3 loai: 5 chu so, 5 chu so va 1 letter, toan letter?
 - Nho no: sua lai 1 ti Phase 4 data cleaning: nicht mehr "return" but "negative quantity", 
-6. data model.sql xong nhung chua chay
+6. data model.sql xong nhung chua chay (done)
+7. base table till base_customer_monthly
+
+# How to filter:
+1. customer ID is not null
+2. stockcode = product
+3. is_negative_price is subset of NULL customerID, nen neu da chon customer ID is not null thi ngay lap tuc price se >= 0
+4. is_zero_price phai tach rieng because no relations to other flags
+5. con lai is_cancelled, is_negative_quantity va is_negative_non_cancelled
+- neu filter stockcode = product thi sofort row duy nhat co is_cancelled = 1 va quantity >=0 bi loai, vi dong nay thuoc vao stockcode = non_product
+- khi da chon stockcode = product thi tat ca rows bi cancelled se thuoc vao negative_quantity, vay chi can chon is_negative_quantity = 0 la xong (no se bao gom luon is_cancelled = 0)
+- khi da chon stockcode = product va is_negative_quantity = 0 thi is_negative_non_cancelled khogn can quan tam nua, vi neu quantity >0 thi chac chan se khong bi cancelled

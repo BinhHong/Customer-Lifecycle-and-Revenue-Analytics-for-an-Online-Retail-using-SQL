@@ -22,7 +22,7 @@ A total of **6,225 records** contained non-positive prices, including **6,220 ze
 
 Zero-price transactions were distributed across normal product stock codes rather than being concentrated in administrative records. These transactions may represent promotional, complimentary, replacement, or bundled items rather than data-entry errors.
 
-The five negative-price transactions represent a negligible proportion of the dataset and are associated with **Stockcode = "B"** and **Description = "Adjust bad debt"**. They are likely related to corrections or accounting adjustments. Interestingly, they are also corresponding to Invoices with prefix "A".
+The five negative-price transactions represent a negligible proportion of the dataset and are associated with **Stockcode = "B"**, **Description = "Adjust bad debt"** and **customer_ID** is **NULL**. They are likely related to corrections or accounting adjustments. Interestingly, they are also corresponding to Invoices with prefix "A".
 
 ## Description Quality
 

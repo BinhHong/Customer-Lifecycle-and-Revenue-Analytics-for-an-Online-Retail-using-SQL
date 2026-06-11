@@ -238,6 +238,8 @@ Relationships:
 - Nho no: sua lai 1 ti Phase 4 data cleaning: nicht mehr "return" but "negative quantity", 
 6. data model.sql xong nhung chua chay (done)
 7. base table till base_customer_monthly
+8. 03_datamodel sua lai nhung chua chay (done)
+
 
 # How to filter:
 1. customer ID is not null

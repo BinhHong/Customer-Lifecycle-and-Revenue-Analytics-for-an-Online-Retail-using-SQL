@@ -235,10 +235,11 @@ Relationships:
 - Description: what does B mean? they are all associated with negative Prices, Description "Adjust bad debt" and Customer IDs are blank.
 - what does StockCode = 'M', Description = 'Manual' mean? they are in the only row with C invoice (meaning cancellation) and negative quantity.
 - kha nang cao la nen kiem tra cac Stockcode toan letters, khong co so. Kha nang chi co 3 loai: 5 chu so, 5 chu so va 1 letter, toan letter?
-- Nho no: sua lai 1 ti Phase 4 data cleaning: nicht mehr "return" but "negative quantity", 
+- Nho no: sua lai 1 ti Phase 4 data cleaning: nicht mehr "return" but "negative quantity", (done)
 6. data model.sql xong nhung chua chay (done)
 7. base table till base_customer_monthly
 8. 03_datamodel sua lai nhung chua chay (done)
+9. Noi 1 ti ve structure cua dataset, y nghia cac cot va moi lien quan giua chung voi nhau
 
 
 # How to filter:

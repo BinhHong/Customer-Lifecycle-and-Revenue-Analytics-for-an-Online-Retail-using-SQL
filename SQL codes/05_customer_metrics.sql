@@ -44,4 +44,37 @@ FROM base_customers;
    2. Customer Acquisition Analysis
   ==================================================*/
   
-  -- 
+-- New customers per month
+-- Result: 
+SELECT first_order_month, COUNT(*) AS num_customers_month
+FROM base_customers
+GROUP BY first_order_month
+ORDER BY first_order_month;
+
+-- Month with highest acquisition
+-- Result: 2009-12 with 951 new customers
+WITH num_cus_month AS
+(SELECT first_order_month, COUNT(*) AS num_customers_month
+FROM base_customers
+GROUP BY first_order_month
+ORDER BY first_order_month
+)
+SELECT first_order_month, num_customers_month
+FROM num_cus_month
+WHERE num_customers_month = 
+	(SELECT MAX(num_customers_month)
+    FROM num_cus_month
+    );
+
+-- Cumulative Number of customers and fluctuations between months
+WITH num_cus_month AS
+(SELECT first_order_month, COUNT(*) AS num_customers_month
+FROM base_customers
+GROUP BY first_order_month
+ORDER BY first_order_month
+)
+SELECT *, 
+	SUM(num_customers_month) OVER(ORDER BY first_order_month) AS cumulative_customers,
+    LAG(num_customers_month) OVER(ORDER BY first_order_month) AS last_num_customers,
+    num_customers_month - LAG(num_customers_month) OVER(ORDER BY first_order_month) AS num_customer_diff
+FROM num_cus_month;

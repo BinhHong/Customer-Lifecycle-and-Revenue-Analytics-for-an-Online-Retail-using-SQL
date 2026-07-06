@@ -63,4 +63,35 @@ SELECT
     COUNT(*) AS customers,
     ROUND(COUNT(*)*100/SUM(COUNT(*)) OVER(),2) AS pct_customers
 FROM	base_customers
-GROUP BY customer_type
+GROUP BY customer_type;
+
+
+/* ===================================================
+   3. Purchase Interval Analysis
+   ===================================================*/
+
+-- Customers Purchase Inverval
+WITH order_interval AS(
+	SELECT	customer_id, 
+		order_date,
+		LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date) AS previous_order_date,
+		DATEDIFF(order_date, LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date)) AS days_between_orders
+	FROM base_orders
+    )
+SELECT *,
+	ROUND(AVG(days_between_orders) OVER(PARTITION BY customer_id),2) AS avg_days_between_orders,
+    ROUND(AVG(days_between_orders) OVER(),2) AS global_avg_days_between_orders
+FROM order_interval;
+
+WITH order_interval AS(
+	SELECT	customer_id, 
+		order_date,
+		LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date) AS previous_order_date,
+		DATEDIFF(order_date, LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date)) AS days_between_orders
+	FROM base_orders
+    )
+SELECT 
+	customer_id,
+    ROUND(AVG(days_between_orders),2)
+FROM order_interval
+GROUP BY customer_id;

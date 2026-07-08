@@ -70,7 +70,8 @@ GROUP BY customer_type;
    3. Purchase Interval Analysis
    ===================================================*/
 
--- Customers Purchase Inverval
+-- Overall Average Customers Purchase Inverval
+-- Result: 52.12 days
 WITH order_interval AS(
 	SELECT	customer_id, 
 		order_date,
@@ -78,11 +79,10 @@ WITH order_interval AS(
 		DATEDIFF(order_date, LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date)) AS days_between_orders
 	FROM base_orders
     )
-SELECT *,
-	ROUND(AVG(days_between_orders) OVER(PARTITION BY customer_id),2) AS avg_days_between_orders,
-    ROUND(AVG(days_between_orders) OVER(),2) AS global_avg_days_between_orders
+SELECT ROUND(AVG(days_between_orders),2) AS overall_avg_interval
 FROM order_interval;
 
+-- Customers Purchase Inverval
 WITH order_interval AS(
 	SELECT	customer_id, 
 		order_date,
@@ -92,6 +92,74 @@ WITH order_interval AS(
     )
 SELECT 
 	customer_id,
-    ROUND(AVG(days_between_orders),2)
+    ROUND(AVG(days_between_orders),2) AS order_interval
 FROM order_interval
 GROUP BY customer_id;
+
+-- Average Customers Purchase Inverval
+-- Result: 103.43
+WITH order_interval AS(
+	SELECT	customer_id, 
+		order_date,
+		LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date) AS previous_order_date,
+		DATEDIFF(order_date, LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date)) AS days_between_orders
+	FROM base_orders
+    ),
+avg_order_interval AS(
+	SELECT 
+		customer_id,
+		ROUND(AVG(days_between_orders),2) AS order_interval
+	FROM order_interval
+	GROUP BY customer_id)
+SELECT ROUND(AVG(order_interval),2) AS avg_order_interval
+FROM avg_order_interval;
+
+-- Median Customers Purchase Inverval
+-- Result: 72.88
+WITH order_intervals AS(
+	SELECT	customer_id, 
+		order_date,
+		LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date) AS previous_order_date,
+		DATEDIFF(order_date, LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date)) AS days_between_orders
+	FROM base_orders
+    ),
+avg_interval AS (
+	SELECT 
+		customer_id,
+		ROUND(AVG(days_between_orders),2) AS avg_order_interval
+	FROM order_intervals
+	GROUP BY customer_id),
+avg_interval_not_null AS(
+	SELECT
+		avg_order_interval,
+		ROW_NUMBER() OVER(ORDER BY avg_order_interval) AS rn,
+		COUNT(*) OVER() AS total_rows
+	FROM avg_interval
+	WHERE avg_order_interval IS NOT NULL)
+SELECT ROUND(AVG(avg_order_interval),2) AS median_order_interval
+FROM avg_interval_not_null
+WHERE rn IN (FLOOR((total_rows+1)/2),FLOOR((total_rows+2)/2));
+
+-- Distribution of Customer Average Purchase Intervals
+WITH order_intervals AS(
+	SELECT	customer_id, 
+		order_date,
+		LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date) AS previous_order_date,
+		DATEDIFF(order_date, LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date)) AS days_between_orders
+	FROM base_orders
+    ),
+avg_intervals AS(
+	SELECT 
+		customer_id,
+		COALESCE(ROUND(AVG(days_between_orders),2), 0) AS order_interval
+	FROM order_intervals
+	GROUP BY customer_id)
+SELECT
+	CASE
+		WHEN order_interval < 52 THEN 'a'
+        WHEN order_interval < 72 THEN 'b'
+        WHEN order_interval < 103 THEN 'c'
+        ELSE 'd'
+	END AS classification
+    
+FROM avg_intervals;

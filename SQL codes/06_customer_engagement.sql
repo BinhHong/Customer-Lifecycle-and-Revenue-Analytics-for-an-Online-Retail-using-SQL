@@ -20,7 +20,7 @@ SELECT	ROUND(AVG(total_orders),2) AS median_order
 FROM	numbered
 WHERE	rn IN(FLOOR((total_rows+1)/2), FLOOR((total_rows+2)/2));
 
--- distribution of total orders
+-- Distribution of total orders
 SELECT
     total_orders,
     COUNT(*) AS customers,
@@ -29,7 +29,7 @@ FROM base_customers
 GROUP BY total_orders
 ORDER BY total_orders;
 
--- Customers segmentation
+-- Purchase Frequency Segmentation
 SELECT
 	CASE
 		WHEN total_orders = 1 THEN 'one_time'
@@ -66,24 +66,29 @@ FROM	base_customers
 GROUP BY customer_type;
 
 -- Time to Second Purchase
+-- Result: 99.02 days in average
 WITH sc_order AS(
 	SELECT
 		customer_id,
 		order_date AS first_order_date,
 		LEAD(order_date) OVER(PARTITION BY customer_id ORDER BY order_date) AS second_order_date,
 		ROW_NUMBER() OVER(PARTITION BY customer_id) AS rn
-	FROM base_orders)
+	FROM base_orders),
+	sc AS(
+	SELECT
+		customer_id, first_order_date, second_order_date, 
+		DATEDIFF(second_order_date, first_order_date) AS days_to_second_order
+	FROM sc_order
+	WHERE rn = 1)
 SELECT
-	customer_id, first_order_date, second_order_date, 
-    DATEDIFF(second_order_date, first_order_date) AS days_to_second_order
-FROM sc_order
-WHERE rn = 1;
+	ROUND(AVG(days_to_second_order),2) AS avg_days_to_second_order
+FROM sc;
 
 /* ===================================================
    3. Purchase Interval Analysis
    ===================================================*/
 
--- Overall Average Customers Purchase Inverval
+-- Overall Average Purchase Inverval
 -- Result: 52.12 days
 WITH order_interval AS(
 	SELECT	customer_id, 
@@ -169,10 +174,10 @@ avg_intervals AS(
 	GROUP BY customer_id)
 SELECT
 	CASE
-		WHEN order_interval < 52 THEN 'quick'
-        WHEN order_interval < 72 THEN 'medium'
-        WHEN order_interval < 103 THEN 'slow'
-        ELSE 'very slow'
+		WHEN order_interval < 31 THEN '<30 days'
+        WHEN order_interval < 91 THEN '31-90 days'
+        WHEN order_interval < 181 THEN '91-180 days'
+        ELSE '>180 days'
 	END AS purchase_interval_type,
     COUNT(*) AS customers  
 FROM avg_intervals
@@ -198,24 +203,63 @@ FROM orders
 GROUP BY `year_month`;
 
 -- Weekday Purchasing Pattern
-WITH wd AS (
-	SELECT *,
+WITH wd AS(
+	SELECT
 		CASE
-			WHEN WEEKDAY(order_date) = 1 THEN 'Sunday'
-			WHEN WEEKDAY(order_date) = 2 THEN 'Monday'
-			WHEN WEEKDAY(order_date) = 3 THEN 'Tuesday'
-			WHEN WEEKDAY(order_date) = 4 THEN 'Wednesday'
-			WHEN WEEKDAY(order_date) = 5 THEN 'Thursday'
-			WHEN WEEKDAY(order_date) = 6 THEN 'Friday'
-			WHEN WEEKDAY(order_date) = 7 THEN 'Saturday'
-		END AS weekday
+			WHEN WEEKDAY(order_date) = 6 THEN 'Sunday'
+			WHEN WEEKDAY(order_date) = 0 THEN 'Monday'
+			WHEN WEEKDAY(order_date) = 1 THEN 'Tuesday'
+			WHEN WEEKDAY(order_date) = 2 THEN 'Wednesday'
+			WHEN WEEKDAY(order_date) = 3 THEN 'Thursday'
+			WHEN WEEKDAY(order_date) = 4 THEN 'Friday'
+			WHEN WEEKDAY(order_date) = 5 THEN 'Saturday'
+		END AS weekday,
+		COUNT(*) AS orders
+	FROM base_orders
+	GROUP BY weekday)
+SELECT
+	*,
+    ROUND(orders/SUM(orders) OVER()*100,2) AS weekday_pct
+FROM wd;
+
+-- Basket size
+-- Result: 20.93 products per order and 286.90 quantity per order in average
+SELECT
+	ROUND(AVG(distinct_products),2) AS avg_product,
+    ROUND(AVG(total_quantity),2) AS avg_quantity
+FROM base_orders;
+
+-- Recall that AOV = 466.43, min = 0.38 and max = 168469.60
+SELECT 
+	ROUND(SUM(total_revenue)/COUNT(*),2) AS aov,
+    MIN(total_revenue) AS min_order_value,
+    MAX(total_revenue) AS max_order_value
+FROM base_orders;
+
+-- Median Order Value
+-- Result: 302.55. So order values are right-skewed distributed.
+WITH rnumber AS(
+	SELECT
+		invoice_no,
+		total_revenue,
+		ROW_NUMBER() OVER(ORDER BY total_revenue) AS rn,
+		COUNT(*) OVER() AS total_rows
 	FROM base_orders)
 SELECT
-	weekday,
-    COUNT(*)
-FROM wd
-GROUP BY weekday;
+	ROUND(AVG(total_revenue),2) AS median_order_value
+FROM rnumber
+WHERE rn IN(FLOOR((total_rows+1)/2),FLOOR((total_rows+2)/2));
 
-SELECT *
+-- Order Value Distribution
+SELECT
+	CASE
+		WHEN total_revenue < 10 THEN '<10 €'
+        WHEN total_revenue < 50 THEN '10-50 €'
+        WHEN total_revenue < 302 THEN '50-302 €'
+        WHEN total_revenue < 466 THEN '302-466 €'
+        WHEN total_revenue < 1000 THEN '466-1000 €'
+        ELSE '>1000 €'
+	END AS order_value_type,
+    COUNT(*) AS orders
 FROM base_orders
-WHERE WEEKDAY(order_date) = 6;
+GROUP BY order_value_type;

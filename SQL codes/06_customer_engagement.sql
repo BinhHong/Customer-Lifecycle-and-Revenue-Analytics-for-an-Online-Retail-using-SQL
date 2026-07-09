@@ -65,6 +65,19 @@ SELECT
 FROM	base_customers
 GROUP BY customer_type;
 
+-- Time to Second Purchase
+WITH sc_order AS(
+	SELECT
+		customer_id,
+		order_date AS first_order_date,
+		LEAD(order_date) OVER(PARTITION BY customer_id ORDER BY order_date) AS second_order_date,
+		ROW_NUMBER() OVER(PARTITION BY customer_id) AS rn
+	FROM base_orders)
+SELECT
+	customer_id, first_order_date, second_order_date, 
+    DATEDIFF(second_order_date, first_order_date) AS days_to_second_order
+FROM sc_order
+WHERE rn = 1;
 
 /* ===================================================
    3. Purchase Interval Analysis
@@ -156,10 +169,53 @@ avg_intervals AS(
 	GROUP BY customer_id)
 SELECT
 	CASE
-		WHEN order_interval < 52 THEN 'a'
-        WHEN order_interval < 72 THEN 'b'
-        WHEN order_interval < 103 THEN 'c'
-        ELSE 'd'
-	END AS classification
-    
-FROM avg_intervals;
+		WHEN order_interval < 52 THEN 'quick'
+        WHEN order_interval < 72 THEN 'medium'
+        WHEN order_interval < 103 THEN 'slow'
+        ELSE 'very slow'
+	END AS purchase_interval_type,
+    COUNT(*) AS customers  
+FROM avg_intervals
+GROUP BY purchase_interval_type;
+
+
+/* ===================================================
+   4. When and how do customers purchase?
+   ===================================================*/
+   
+-- Monthly Purchase Pattern
+WITH orders AS
+	(SELECT
+		*,
+		DATE_FORMAT(order_date, '%Y-%m') AS `year_month`
+	FROM base_orders)
+SELECT
+	`year_month`,
+    COUNT(*) AS orders,
+    LAG(COUNT(*)) OVER(ORDER BY `year_month`) AS previous_orders,
+    ROUND((COUNT(*) - LAG(COUNT(*)) OVER(ORDER BY `year_month`))/LAG(COUNT(*)) OVER(ORDER BY `year_month`)*100,2) AS growth_order_pct
+FROM orders
+GROUP BY `year_month`;
+
+-- Weekday Purchasing Pattern
+WITH wd AS (
+	SELECT *,
+		CASE
+			WHEN WEEKDAY(order_date) = 1 THEN 'Sunday'
+			WHEN WEEKDAY(order_date) = 2 THEN 'Monday'
+			WHEN WEEKDAY(order_date) = 3 THEN 'Tuesday'
+			WHEN WEEKDAY(order_date) = 4 THEN 'Wednesday'
+			WHEN WEEKDAY(order_date) = 5 THEN 'Thursday'
+			WHEN WEEKDAY(order_date) = 6 THEN 'Friday'
+			WHEN WEEKDAY(order_date) = 7 THEN 'Saturday'
+		END AS weekday
+	FROM base_orders)
+SELECT
+	weekday,
+    COUNT(*)
+FROM wd
+GROUP BY weekday;
+
+SELECT *
+FROM base_orders
+WHERE WEEKDAY(order_date) = 6;

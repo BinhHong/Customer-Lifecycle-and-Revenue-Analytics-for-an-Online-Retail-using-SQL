@@ -115,7 +115,7 @@ FROM order_interval
 GROUP BY customer_id;
 
 -- Average Customers Purchase Inverval
--- Result: 103.43
+-- Result: 103.43 days
 WITH order_interval AS(
 	SELECT	customer_id, 
 		order_date,
@@ -133,7 +133,7 @@ SELECT ROUND(AVG(order_interval),2) AS avg_order_interval
 FROM avg_order_interval;
 
 -- Median Customers Purchase Inverval
--- Result: 72.88
+-- Result: 72.88 days
 WITH order_intervals AS(
 	SELECT	customer_id, 
 		order_date,

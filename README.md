@@ -228,7 +228,22 @@ Relationships:
 - dim_products → fact_transactions
 - dim_date → fact_transactions
 
+
+# Methodology:
+- Customer status was determined relative to the last transaction date in the dataset, which is 2011-12-09 (the analysis date), rather than the current calendar date. This avoids bias caused by the limited observation window and reflects the customer's status at the end of the recorded period.
+- for 07 customer lifetime: Customer status thresholds were derived from the observed purchase behavior of the dataset. The overall average purchase interval was 52 days, while the average customer purchase interval was 103 days (median 73 days). Based on these findings, customers were classified as:
+
+Active: last purchase within 60 days
+At Risk: last purchase between 61 and 120 days
+Churned: no purchase for more than 120 days
+
 # To do next:
+- Customer Survival Curve
+Survival table
+Survival percentages over time
+Survival curve
+
+# To do next for project:
 - in 6: invalid prices, check with Stockcode (done)
 - correct words with missing and empty (e.g. misisng Descriptions or empty Desc?) right from the start (done)
 - 01 data quality: step 4 fertig (done)

@@ -236,6 +236,7 @@ Relationships:
 Active: last purchase within 60 days
 At Risk: last purchase between 61 and 120 days
 Churned: no purchase for more than 120 days
+- RFM Segmentation: 
 
 # To do next:
 - Customer Survival Curve

@@ -2,7 +2,7 @@
    1. Customer Purchase Frequency
    ==================================================*/
    
--- Average order per customer
+-- Average orders per customer
 -- Result: 6.25
 SELECT	ROUND(AVG(total_orders),2) AS avg_order
 FROM	base_customers;

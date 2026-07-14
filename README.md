@@ -237,6 +237,35 @@ Active: last purchase within 60 days
 At Risk: last purchase between 61 and 120 days
 Churned: no purchase for more than 120 days
 - RFM Segmentation: 
+# Key findings and Business Insights
+## Customer base overview and acquisition
+
+* The observed customer base contains **5,852 customers**, who placed **36,594 valid orders** and generated approximately **£17.07 million** in revenue during the observation period.
+
+* On average customers placed **6.25 orders**, generated **£2,916.71 in revenue**, and remained active for approximately **274 days**. This suggests that the business has an established customer base rather than relying exclusively on isolated transactions.
+
+* The overall **Average Order Value was £466.43**, indicating nocticeable order sizes. This is consistent with the presence of wholesale customers.
+
+* Customer acquisition was strongest in **March 2010** with **441 customers** but subsequently became weaker. It fell from **3,288 customers during January–November 2010** to **1,509 during January–November 2011**, a decline of approximately **54%**. The business continued adding customers, but the pace of customer-base growth was slower. It is worth noting that **951 customers first observed in December 2009** should be treated as the initial observed customer base rather than as confirmed new acquisitions and **28 customers recorded in December 2011** should not be considered in acquisition analyse because the dataset contains only the first nine days of that month.
+
+* Acquisition showed recurring strength during **September and October** in both 2010 and 2011. In addition to that, it weakened after March 2010 and at the end of 2010. This suggests that acquisition may have depended on seasonal demand.
+
+# Business Recommendations
+
+1. **Investigate the causes of the acquisition decline.**
+   The 54% reduction in acquisition between 2010 and 2011 is large enough to require management attention. The business should review historical marketing activity, acquisition channels, customer geography, and market conditions to determine whether the decline resulted from lower campaign activity, weaker demand or market saturation.
+
+2. **Replicate successful acquisition activity from peak periods and increase acquisition activity before the autumn peak.**
+   March 2010 and the recurring September-October should be reviewed for successful campaigns, promotions and product ranges. Proven acquisition tactics from these periods should be documented and reused in future campaigns. Marketing and sales campaigns should begin before this period.
+
+3. **Balance acquisition investment with customer retention.**
+   The business already has customers placing multiple orders and remaining active for roughly nine months on average. As acquisition slows, protecting and expanding value from existing customers becomes increasingly important. Resources should therefore be divided between acquiring new customers and encouraging existing customers to place additional orders.
+
+
+4. **Develop different strategies for wholesale and smaller customers.**
+   The high AOV suggests that wholesale or bulk purchasers significantly influence business performance. They should receive incentives through proactive customer services, while lower-value customers may respond better to automated retention campaigns.
+
+
 
 # To do next:
 - Customer Survival Curve

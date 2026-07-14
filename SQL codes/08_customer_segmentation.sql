@@ -26,8 +26,8 @@ rfm AS(
 SELECT
 	CASE
 		WHEN R=5 AND F=5 AND M=5 THEN 'Champions'
-        WHEN R>=4 AND F>=3 AND M=5 THEN 'High-value customers'
         WHEN R>=4 AND F>=4 THEN 'Loyal customers'
+        WHEN R>=4 AND F>=3 AND M=5 THEN 'High-value customers'        
         WHEN R=5 AND F=1 THEN 'New customers'
         WHEN R<=2 AND F>=4 THEN 'At risk'
         ELSE 'Others'
@@ -93,13 +93,13 @@ lifecycle AS(
 		customer_id,
 		CASE
 			WHEN R=5 AND F=5 AND M=5 THEN 'champions'
-			WHEN R>=4 AND F>=3 AND M=5 THEN 'valuable customers'
-			WHEN R>=4 AND F>=4 THEN 'loyal customers'
+            WHEN R>=4 AND F>=4 THEN 'loyal customers'
+			WHEN R>=4 AND F>=3 AND M=5 THEN 'valuable customers'			
 			WHEN R=5 AND F=1 THEN 'new customers'
 			WHEN R<=2 AND F>=4 THEN 'at risk'
 			ELSE 'others'
 		END AS RFM_Segment,
-			CASE
+		CASE
 			WHEN days_since_first_purchase <=30 THEN 'New'
 			WHEN days_since_last_purchase <= 60 THEN 'Active'
 			WHEN days_since_last_purchase <= 120 THEN 'At risk'

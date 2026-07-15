@@ -14,10 +14,8 @@ Management requires deeper insights into customer purchasing patterns and their 
 * How quickly do customers become inactive?
 * Which customer segments should receive strategic attention?
 
-The objective is to move beyond transactional reporting and develop a customer-centric analytical framework that supports business decision-making.
-
 ## Dataset
-The dataset is transactional and recorded at the order-item level. One row represents one product line item within an invoice. The transactions are recorded from 2009-12-01 to 2011-12-09.
+The Online Retail II dataset is transactional and recorded at the order-item level. One row represents one product line item within an invoice. The transactions are recorded from 2009-12-01 to 2011-12-09.
 
 Attribute Information:
 - InvoiceNo: A 6-digit integral number uniquely assigned to each transaction. If this code starts with the letter 'C', it indicates a cancellation.
@@ -40,11 +38,14 @@ This project aims to build a SQL-based analytics framework to evaluate customer 
 * Customer lifecycle analytics
 * Customer lifetime value analysis (CLV)
 
+The objective is to move beyond transactional reporting and develop a customer-centric analytical framework that supports business decision-making.
+
 # Methodology
 
-## Raw Data Setup
+## Data preparation
+### Raw Data Setup
 
-A dedicated MySQL database was created to serve as the foundation for the analytical workflow. The Online Retail II dataset was imported into a raw staging table, preserving the original source data before any transformations or cleaning activities were performed.
+A dedicated MySQL database was created to serve as the foundation for the analytical workflow. The dataset was imported into a raw staging table, preserving the original source data before any transformations or cleaning activities were performed.
 
 Key activities completed during this phase:
 
@@ -53,7 +54,9 @@ Key activities completed during this phase:
 * Validated import integrity through row-count and structure verification
 * Established a reproducible raw data layer to support subsequent data quality assessment and transformation processes
 
-This raw layer serves as the single source of truth throughout the project and remains unchanged during later analytical stages.
+### Raw Data Validation
+### Data Quality
+### Data cleaning
 
 ## Data Model
 
@@ -69,6 +72,9 @@ Relationships:
 - dim_products → fact_transactions
 - dim_date → fact_transactions
 
+## Creating base tables
+
+## Analyse
 
 
 - Customer status was determined relative to the last transaction date in the dataset, which is 2011-12-09 (the analysis date), rather than the current calendar date. This avoids bias caused by the limited observation window and reflects the customer's status at the end of the recorded period.

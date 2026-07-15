@@ -7,7 +7,7 @@
 
 The company is a UK-based non-store online retailer focusing on unique all-occasion gift products, with a substantial proportion of customers operating as wholesalers. While transaction activity and revenue generation are available, understanding customer behavior and long-term value remains critical for sustainable growth.
 
-Management requires deeper insight into customer purchasing patterns and their impact on business performance. Key business questions include:
+Management requires deeper insights into customer purchasing patterns and their impact on business performance. Key business questions include:
 
 * Which customers generate the highest long-term value?
 * How concentrated is revenue among customer groups?
@@ -19,6 +19,21 @@ The objective is to move beyond transactional reporting and develop a customer-c
 
 ## Dataset
 - The dataset is transactional and recorded at the order-item level.
+One row represents one product line item within a transaction (invoice)
+Attribute Information:
+InvoiceNo: Invoice number. Nominal. A 6-digit integral number uniquely assigned to each transaction. If this code starts with the letter 'c', it indicates a cancellation.
+StockCode: Product (item) code. Nominal. A 5-digit integral number uniquely assigned to each distinct product.
+Description: Product (item) name. Nominal.
+Quantity: The quantities of each product (item) per transaction. Numeric.
+InvoiceDate: Invice date and time. Numeric. The day and time when a transaction was generated.
+UnitPrice: Unit price. Numeric. Product price per unit in sterling (Â£).
+CustomerID: Customer number. Nominal. A 5-digit integral number uniquely assigned to each customer.
+Country: Country name. Nominal. The name of the country where a customer resides.
+
+* Invoice numbers beginning with **"C"** indicate canceled transactions.
+* Negative quantities are expected to represent returned items.
+* Missing customer identifiers likely indicate anonymous transactions.
+
 Note: date 2009-12-01 07:45:00 to 2011-12-09 12:50:00
 ---
 
@@ -45,127 +60,6 @@ This project aims to build a SQL-based analytics framework to evaluate customer 
 * Analyze customer survival behavior over time
 * Evaluate long-term customer value and lifecycle development
 
----
-
-## Data Granularity (Grain Definition)
-
-The dataset is transactional and recorded at the order-item level.
-
-**Grain definition:**
-
-> One row represents one product line item within a transaction (invoice).
-
-This implies:
-
-* One invoice may contain multiple products
-* One customer may place multiple invoices
-* Revenue calculations must consider transaction-level aggregation
-* Customer-level metrics require transformation from transactional data
-
-Understanding the data grain is critical to avoid aggregation errors and double-counting issues during analysis.
-
----
-
-## Business Entities
-
-The following analytical entities are derived from the transactional dataset:
-
-### Customer
-
-Represents individual customers and their purchasing behavior.
-
-Potential analytical metrics:
-
-* Customer lifetime
-* Total revenue contribution
-* Purchase frequency
-* First and most recent purchase activity
-
-### Orders
-
-Represents transaction-level activity.
-
-Potential analytical metrics:
-
-* Order value
-* Number of products per order
-* Order frequency
-
-### Products
-
-Represents individual items sold by the business.
-
-Potential analytical metrics:
-
-* Product popularity
-* Quantity sold
-* Product revenue contribution
-
-### Time
-
-Derived from transaction timestamps.
-
-Potential analytical metrics:
-
-* Monthly trends
-* Cohort periods
-* Seasonal patterns
-
-### Geography
-
-Represents customer location information.
-
-Potential analytical metrics:
-
-* Revenue distribution by country
-* Customer distribution by country
-
----
-
-## Initial Assumptions
-
-Attribute Information:
-InvoiceNo: Invoice number. Nominal. A 6-digit integral number uniquely assigned to each transaction. If this code starts with the letter 'c', it indicates a cancellation.
-StockCode: Product (item) code. Nominal. A 5-digit integral number uniquely assigned to each distinct product.
-Description: Product (item) name. Nominal.
-Quantity: The quantities of each product (item) per transaction. Numeric.
-InvoiceDate: Invice date and time. Numeric. The day and time when a transaction was generated.
-UnitPrice: Unit price. Numeric. Product price per unit in sterling (Â£).
-CustomerID: Customer number. Nominal. A 5-digit integral number uniquely assigned to each customer.
-Country: Country name. Nominal. The name of the country where a customer resides.
-
-The following assumptions are established before data profiling and validation:
-
-* Invoice numbers beginning with **"C"** indicate canceled transactions.
-* Negative quantities are expected to represent returned items.
-* Missing customer identifiers likely indicate anonymous transactions.
-* Initial revenue calculations are based on:
-
-Revenue = Quantity × UnitPrice
-
-* Customer behavior may vary between wholesalers and regular customers.
-
-These assumptions will be validated and refined during the data quality assessment phase.
-
----
-
-## Metric Definitions & Assumptions
-
-Metric definitions will remain provisional until exploratory profiling and data quality assessment are completed.
-
-Definitions to be finalized include:
-
-* Active Customer
-* Repeat Customer
-* Customer Churn
-* Customer Retention
-* Revenue Definition
-* Customer Lifetime Value (CLV) methodology
-
-These definitions will establish analytical consistency across all subsequent phases of the project.
-
-## Success Metrics
-
 This project is considered successful if it delivers:
 
 * A reusable SQL analytical framework for customer lifecycle and revenue analysis
@@ -175,11 +69,6 @@ This project is considered successful if it delivers:
 * Actionable recommendations based on customer and revenue patterns
 * A reproducible and well-documented analytical workflow
 
----
-
-## Analytical Scope
-
-### Included Scope
 
 The project focuses on:
 
@@ -191,14 +80,7 @@ The project focuses on:
 * Customer behavior and purchasing patterns
 * Customer value analysis (CLV)
 
-### Excluded Scope
-
-The following areas are outside the scope of this project:
-
-* Profitability analysis (cost information unavailable)
-* Marketing attribution analysis
-* Inventory analysis
-* Machine learning or predictive modeling
+# 3. Methodology
 
 ## Raw Data Setup
 
@@ -228,7 +110,7 @@ Relationships:
 - dim_date → fact_transactions
 
 
-# Methodology:
+
 - Customer status was determined relative to the last transaction date in the dataset, which is 2011-12-09 (the analysis date), rather than the current calendar date. This avoids bias caused by the limited observation window and reflects the customer's status at the end of the recorded period.
 - for 07 customer lifetime: Customer status thresholds were derived from the observed purchase behavior of the dataset. The overall average purchase interval was 52 days, while the average customer purchase interval was 103 days (median 73 days). Based on these findings, customers were classified as:
 
@@ -236,7 +118,8 @@ Active: last purchase within 60 days
 At Risk: last purchase between 61 and 120 days
 Churned: no purchase for more than 120 days
 - RFM Segmentation: 
-# Key findings and Business Insights
+
+# 4. Key findings and Business Insights
 ## Customer base overview and acquisition
 
 * The observed customer base contains **5,852 customers**, who placed **36,594 valid orders** and generated approximately **£17.07 million** in revenue during the observation period.
@@ -285,7 +168,7 @@ Churned: no purchase for more than 120 days
 
 - The majority of VIP customers also achieved the highest **RFM scores (R=5, F=5, M=5)**, confirming a strong relationship between purchasing frequency, recent activity, and long-term customer value.
 
-# Business Recommendations
+# 5. Business Recommendations
 ## Customer base overview and acquisition
 
 1. **Investigate the causes of the acquisition decline.**
@@ -336,34 +219,3 @@ Churned: no purchase for more than 120 days
 
 - **Allocate marketing budgets based on customer value.** Invest retention resources proportionally to historical customer value while using cost-efficient automated campaigns for lower-value customer segments.
 
-
-# To do next:
-- Customer Survival Curve
-Survival table
-Survival percentages over time
-Survival curve
-
-# To do next for project:
-- in 6: invalid prices, check with Stockcode (done)
-- correct words with missing and empty (e.g. misisng Descriptions or empty Desc?) right from the start (done)
-- 01 data quality: step 4 fertig (done)
-- Description: what does B mean? they are all associated with negative Prices, Description "Adjust bad debt" and Customer IDs are blank.
-- what does StockCode = 'M', Description = 'Manual' mean? they are in the only row with C invoice (meaning cancellation) and negative quantity.
-- kha nang cao la nen kiem tra cac Stockcode toan letters, khong co so. Kha nang chi co 3 loai: 5 chu so, 5 chu so va 1 letter, toan letter?
-- Nho no: sua lai 1 ti Phase 4 data cleaning: nicht mehr "return" but "negative quantity", (done)
-6. data model.sql xong nhung chua chay (done)
-7. base table till base_customer_monthly (done)
-8. 03_datamodel sua lai nhung chua chay (done)
-9. Noi 1 ti ve structure cua dataset, y nghia cac cot va moi lien quan giua chung voi nhau
-10. 06 customer engagement, till 5. Purchase Interval Analysis
-
-
-# How to filter:
-1. customer ID is not null
-2. stockcode = product
-3. is_negative_price is subset of NULL customerID, nen neu da chon customer ID is not null thi ngay lap tuc price se >= 0
-4. is_zero_price phai tach rieng because no relations to other flags
-5. con lai is_cancelled, is_negative_quantity va is_negative_non_cancelled
-- neu filter stockcode = product thi sofort row duy nhat co is_cancelled = 1 va quantity >=0 bi loai, vi dong nay thuoc vao stockcode = non_product
-- khi da chon stockcode = product thi tat ca rows bi cancelled se thuoc vao negative_quantity, vay chi can chon is_negative_quantity = 0 la xong (no se bao gom luon is_cancelled = 0)
-- khi da chon stockcode = product va is_negative_quantity = 0 thi is_negative_non_cancelled khogn can quan tam nua, vi neu quantity >0 thi chac chan se khong bi cancelled

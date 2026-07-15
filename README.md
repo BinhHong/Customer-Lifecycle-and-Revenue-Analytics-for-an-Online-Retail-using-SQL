@@ -50,22 +50,16 @@ The objective is to move beyond transactional reporting and develop a customer-c
 
 ## Data Model
 A star schema was implemented to support customer lifecycle analytics.
-
 - fact_transactions stores transaction-level records.
 - dim_customers stores customer attributes.
 - dim_products stores product attributes.
 - dim_date supports time-based analysis and cohort calculations.
 
-Relationships:
-- dim_customers → fact_transactions
-- dim_products → fact_transactions
-- dim_date → fact_transactions
+![Data Model](Images/model.png?raw=true)
 
 ## Creating base tables
 
 ## Analyse
-
-
 - Customer status was determined relative to the last transaction date in the dataset, which is 2011-12-09 (the analysis date), rather than the current calendar date. This avoids bias caused by the limited observation window and reflects the customer's status at the end of the recorded period.
 - for 07 customer lifetime: Customer status thresholds were derived from the observed purchase behavior of the dataset. The overall average purchase interval was 52 days, while the average customer purchase interval was 103 days (median 73 days). Based on these findings, customers were classified as:
 

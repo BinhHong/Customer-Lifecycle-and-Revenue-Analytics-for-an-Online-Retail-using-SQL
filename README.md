@@ -43,23 +43,12 @@ The objective is to move beyond transactional reporting and develop a customer-c
 # Methodology
 
 ## Data preparation
-### Raw Data Setup
-
-A dedicated MySQL database was created to serve as the foundation for the analytical workflow. The dataset was imported into a raw staging table, preserving the original source data before any transformations or cleaning activities were performed.
-
-Key activities completed during this phase:
-
-* Created the project database (`online_retail_analysis`)
-* Imported the complete Online Retail II transactional dataset into a raw staging table
-* Validated import integrity through row-count and structure verification
-* Established a reproducible raw data layer to support subsequent data quality assessment and transformation processes
-
-### Raw Data Validation
-### Data Quality
-### Data cleaning
+- Raw Data Setup: A dedicated MySQL database was created to serve as the foundation for the analytical workflow. The dataset was imported into a raw staging table, preserving the original source data before any transformations or cleaning activities were performed.
+- Raw Data Validation
+- Data Quality
+- Data cleaning
 
 ## Data Model
-
 A star schema was implemented to support customer lifecycle analytics.
 
 - fact_transactions stores transaction-level records.

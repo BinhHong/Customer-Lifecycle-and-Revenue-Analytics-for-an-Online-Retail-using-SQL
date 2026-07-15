@@ -1,7 +1,6 @@
-# Customer-Lifecycle-and-Revenue-Analytics-for-an-Online-Retail-using-SQL
+# Customer Lifecycle Analytics for an Online Retail using SQL
 
-# 1. Business and Data Understanding
-
+# Business and Data Understanding
 
 ## Business Problem
 
@@ -18,69 +17,30 @@ Management requires deeper insights into customer purchasing patterns and their 
 The objective is to move beyond transactional reporting and develop a customer-centric analytical framework that supports business decision-making.
 
 ## Dataset
-- The dataset is transactional and recorded at the order-item level.
-One row represents one product line item within a transaction (invoice)
+The dataset is transactional and recorded at the order-item level. One row represents one product line item within an invoice. The transactions are recorded from 2009-12-01 to 2011-12-09.
+
 Attribute Information:
-InvoiceNo: Invoice number. Nominal. A 6-digit integral number uniquely assigned to each transaction. If this code starts with the letter 'c', it indicates a cancellation.
-StockCode: Product (item) code. Nominal. A 5-digit integral number uniquely assigned to each distinct product.
-Description: Product (item) name. Nominal.
-Quantity: The quantities of each product (item) per transaction. Numeric.
-InvoiceDate: Invice date and time. Numeric. The day and time when a transaction was generated.
-UnitPrice: Unit price. Numeric. Product price per unit in sterling (Â£).
-CustomerID: Customer number. Nominal. A 5-digit integral number uniquely assigned to each customer.
-Country: Country name. Nominal. The name of the country where a customer resides.
+- InvoiceNo: A 6-digit integral number uniquely assigned to each transaction. If this code starts with the letter 'C', it indicates a cancellation.
+- StockCode: A 5-digit integral number uniquely assigned to each distinct product.
+- Description: Product name.
+- Quantity: The quantities of each product per transaction.
+- InvoiceDate: The day and time when a transaction was generated.
+- UnitPrice: Product price per unit in sterling (£).
+- CustomerID: A 5-digit integral number uniquely assigned to each customer.
+- Country: The name of the country where a customer resides.
 
-* Invoice numbers beginning with **"C"** indicate canceled transactions.
-* Negative quantities are expected to represent returned items.
-* Missing customer identifiers likely indicate anonymous transactions.
+# Project Objectives
 
-Note: date 2009-12-01 07:45:00 to 2011-12-09 12:50:00
----
+This project aims to build a SQL-based analytics framework to evaluate customer behavior through customer lifecycle analysis. The project focuses on the following analytical perspectives:
 
-# 2. Project Objectives
-
-This project aims to build a SQL-based analytics framework to evaluate customer behavior and revenue performance through customer lifecycle analysis. The project focuses on three analytical perspectives:
-
-### Customer Intelligence
-
-* Analyze customer purchasing behavior
-* Identify high-value customer segments
-* Understand customer lifecycle patterns
-* Measure customer engagement and purchasing frequency
-
-### Revenue Intelligence
-
-* Analyze revenue generation patterns
-* Evaluate revenue concentration across customers
-* Measure customer contribution to business performance
-
-### Retention Intelligence
-
-* Assess customer retention and churn patterns
-* Analyze customer survival behavior over time
-* Evaluate long-term customer value and lifecycle development
-
-This project is considered successful if it delivers:
-
-* A reusable SQL analytical framework for customer lifecycle and revenue analysis
-* Reliable customer and revenue metrics derived from transactional data
-* Meaningful customer segmentation using RFM and behavioral analysis
-* Retention and churn insights that support business decision-making
-* Actionable recommendations based on customer and revenue patterns
-* A reproducible and well-documented analytical workflow
-
-
-The project focuses on:
-
-* Customer lifecycle analytics
-* Revenue analytics
-* Customer segmentation
-* Cohort analysis
-* Customer retention and churn
 * Customer behavior and purchasing patterns
-* Customer value analysis (CLV)
+* Customer retention and churn
+* Cohort analysis
+* Customer segmentation using RFM and behavioral analysis
+* Customer lifecycle analytics
+* Customer lifetime value analysis (CLV)
 
-# 3. Methodology
+# Methodology
 
 ## Raw Data Setup
 
@@ -119,7 +79,7 @@ At Risk: last purchase between 61 and 120 days
 Churned: no purchase for more than 120 days
 - RFM Segmentation: 
 
-# 4. Key findings and Business Insights
+# Key findings and Business Insights
 ## Customer base overview and acquisition
 
 * The observed customer base contains **5,852 customers**, who placed **36,594 valid orders** and generated approximately **£17.07 million** in revenue during the observation period.
@@ -168,7 +128,7 @@ Churned: no purchase for more than 120 days
 
 - The majority of VIP customers also achieved the highest **RFM scores (R=5, F=5, M=5)**, confirming a strong relationship between purchasing frequency, recent activity, and long-term customer value.
 
-# 5. Business Recommendations
+# Business Recommendations
 ## Customer base overview and acquisition
 
 1. **Investigate the causes of the acquisition decline.**

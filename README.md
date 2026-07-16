@@ -48,7 +48,7 @@ Attribute Information:
 
 ## Data Preparation
 The data preparation includes 3 careful and detailed steps:
-- [Raw Data Setup and Validation](SQL%20Codes/00_raw_data_validation.sql)
+- [Raw Data Setup and Validation](SQL%20codes/00_raw_data_validation.sql)
 - Data Quality Assessment
 - Data Cleaning and Transformation
 ## Data Modelling

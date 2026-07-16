@@ -1,6 +1,11 @@
 # Customer Lifecycle Analytics for an Online Retailer using SQL
 
 # Executive Summary
+This project develops a complete SQL-based customer lifecycle analytics framework using the Online Retail II dataset.
+
+Starting from raw transactional data, the project performs data validation, data quality assessment, cleaning, dimensional modelling, and customer analytics to understand customer behaviour, retention, segmentation, and historical customer lifetime value.
+
+The analysis identifies key customer segments, evaluates customer retention through cohort analysis, measures churn, and provides actionable business recommendations to improve long-term customer value.
 
 # Business and Data Understanding
 
@@ -47,10 +52,11 @@ The objective is to move beyond transactional reporting and develop a customer-c
 - JOINs
 - CTEs
 - Window functions
-- Cohort analysis
-- RFM scoring
-- Star-schema modeling
-- Data-quality profiling
+- CASE Expressions
+- Star Schema Modelling
+- Cohort Analysis
+- RFM Segmentation
+
 # Methodology
 
 ## Data Setup and Validation
@@ -68,7 +74,7 @@ A star schema was implemented to support customer lifecycle analytics.
 ![Data Model](Images/model.png?raw=true)
 
 ## Creating base tables
-For the purpose of analyzing the customer lifecycle 3 base tables have been created:
+To simplify customer lifecycle analysis, 3 reusable base tables were created:
 - base transactions
 - base customers
 - base orders
@@ -82,12 +88,26 @@ The following customer lifcycle analyses has been carried out:
 - historical CLV
 
 # Business Insights and Recommendations
-
+Business insights and recommendations are available in:
+- Business_Insights.md
+- Recommendations.md
 # Conclusion
 
 The analysis shows that the retailer has a valuable repeat-purchasing customer base, but business performance is unevenly distributed. A relatively small group of Champions, Loyal customers, and VIP customers generates a large share of revenue, while almost half of the observed customer base is classified as churned.
 
-The most important business opportunity is therefore not simply to acquire more customers. The company should protect its highest-value relationships, convert first-time buyers into repeat customers within the first three months, and intervene before inactive customers exceed the 120-day churn threshold. At the same time, the substantial decline in observed customer acquisition between 2010 and 2011 should be investigated and addressed.
+The analysis suggests that sustainable business growth depends not only on acquiring new customers but also on increasing customer retention and maximizing customer lifetime value.. The company should protect its highest-value relationships, convert first-time buyers into repeat customers within the first three months, and intervene before inactive customers exceed the 120-day churn threshold. At the same time, the substantial decline in observed customer acquisition between 2010 and 2011 should be investigated and addressed.
 
 Together, these actions would reduce dependence on a small group of customers, strengthen retention, and improve long-term customer value.
 
+# Repository Structure
+
+├── SQL
+│   ├── 01_raw_data.sql
+│   ├── ...
+│   └── 09_historical_clv.sql
+│
+├── Images
+│
+├── Business_Insights.md
+├── Recommendations.md
+└── README.md

@@ -1,4 +1,4 @@
-# Customer Lifecycle Analytics for an Online Retailer using SQL
+# Customer Lifecycle Analytics in SQL: From Raw Data to Business Insights
 
 # Executive Summary
 

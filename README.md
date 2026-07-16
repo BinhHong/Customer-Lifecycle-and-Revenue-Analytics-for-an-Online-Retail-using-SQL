@@ -22,7 +22,7 @@ Management requires deeper insights into customer purchasing patterns and their 
 * Which customer segments should receive strategic attention?
 
 ## Dataset
-The Online Retail II dataset is transactional and recorded at the order-item level. One row represents one product line item within an invoice. The transactions are recorded from 2009-12-01 to 2011-12-09.
+The Online Retail II dataset is recorded at the order-item level. One row represents one product line item within an invoice. The transactions are recorded from 2009-12-01 to 2011-12-09.
 
 Attribute Information:
 - InvoiceNo: A 6-digit integral number uniquely assigned to each transaction. If this code starts with the letter 'C', it indicates a cancellation.
@@ -59,11 +59,11 @@ The objective is to move beyond transactional reporting and develop a customer-c
 
 # Methodology
 
-## Data Setup and Validation
-The data preparation includes 4 careful and detailed steps:
-- Raw Data Setup: A MySQL database was created to serve as the foundation for the analytical workflow. The dataset was imported into a raw staging table, preserving the original source data before any transformations or cleaning activities were performed.
-## Data Quality Assessment
-## Data cleaning and Transformation
+## Data Preparation
+The data preparation includes 3 careful and detailed steps:
+- Raw Data Setup and Validation
+- Data Quality Assessment
+- Data Cleaning and Transformation
 ## Data Modelling
 A star schema was implemented to support customer lifecycle analytics.
 - fact_transactions stores transaction-level records.
@@ -80,7 +80,7 @@ To simplify customer lifecycle analysis, 3 reusable base tables were created:
 - base orders
 
 ## Customer Analytics
-The following customer lifcycle analyses has been carried out:
+The following customer lifecycle analyses have been carried out:
 - customer foundation and acquisition
 - customer engagement, which includes Purchase Frequency, Repeat Purchase Rate, Purchase Interval Analysis and Purchase Behavior
 - customer lifetime and retention, Cohort Analysis and Churn Status
@@ -98,16 +98,3 @@ The analysis shows that the retailer has a valuable repeat-purchasing customer b
 The analysis suggests that sustainable business growth depends not only on acquiring new customers but also on increasing customer retention and maximizing customer lifetime value.. The company should protect its highest-value relationships, convert first-time buyers into repeat customers within the first three months, and intervene before inactive customers exceed the 120-day churn threshold. At the same time, the substantial decline in observed customer acquisition between 2010 and 2011 should be investigated and addressed.
 
 Together, these actions would reduce dependence on a small group of customers, strengthen retention, and improve long-term customer value.
-
-# Repository Structure
-
-├── SQL
-│   ├── 01_raw_data.sql
-│   ├── ...
-│   └── 09_historical_clv.sql
-│
-├── Images
-│
-├── Business_Insights.md
-├── Recommendations.md
-└── README.md

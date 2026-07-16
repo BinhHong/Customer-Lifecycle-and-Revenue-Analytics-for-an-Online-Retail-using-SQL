@@ -49,8 +49,8 @@ Attribute Information:
 ## Data Preparation
 The data preparation includes 3 careful and detailed steps:
 - [Raw Data Setup and Validation](SQL%20codes/00_raw_data_validation.sql)
-- Data Quality Assessment
-- Data Cleaning and Transformation
+- [Data Quality Assessment](SQL%20codes/01_data_quality.sql)
+- [Data Cleaning and Transformation](SQL%20codes/02_data_cleaning.sql)
 ## Data Modelling
 A star schema was implemented to support customer lifecycle analytics.
 - fact_transactions stores transaction-level records.
@@ -68,11 +68,11 @@ To simplify customer lifecycle analysis, 3 reusable base tables were created:
 
 ## Customer Analytics
 The following customer lifecycle analyses have been carried out:
-- customer foundation and acquisition
-- customer engagement, which includes Purchase Frequency, Repeat Purchase Rate, Purchase Interval Analysis and Purchase Behavior
-- customer lifetime and retention, Cohort Analysis and Churn Status
-- customer segmentation, which consists of RFM Segmentation and Customer Lifecycle Segmentation
-- historical CLV
+- [customer foundation and acquisition](SQL%20codes/05_customer_metrics.sql)
+- [customer engagement](SQL%20codes/06_customer_engagement.sql), which includes Purchase Frequency, Repeat Purchase Rate, Purchase Interval Analysis and Purchase Behavior
+- [customer lifetime and retention, Cohort Analysis and Churn Status](SQL%20codes/07_customer_lifetime_and_retention.sql)
+- [customer segmentation](SQL%20codes/08_customer_segmentation.sql), which consists of RFM Segmentation and Customer Lifecycle Segmentation
+- [historical CLV](SQL%20codes/09_historical_clv.sql)
 
 # Business Insights and Recommendations
 Business insights and recommendations are available in:

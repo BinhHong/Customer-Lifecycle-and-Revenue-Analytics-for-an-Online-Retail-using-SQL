@@ -48,7 +48,7 @@ Attribute Information:
 
 ## Data Preparation
 The data preparation includes 3 careful and detailed steps:
-- Raw Data Setup and Validation
+- Raw Data Setup and Validation: [View Data Model Diagram](SQL%20Codes/00_raw_data_validation.sql)
 - Data Quality Assessment
 - Data Cleaning and Transformation
 ## Data Modelling
@@ -58,11 +58,7 @@ A star schema was implemented to support customer lifecycle analytics.
 - dim_products stores product attributes.
 - dim_date supports time-based analysis and cohort calculations.
 
-## Data Model
-
-The star schema used in this project is available in the **Data Model** folder.
-
-➡️ [View Data Model Diagram](Images/model.png)
+[View Data Model Diagram](Data%20Model/model.png)
 
 ## Analytical base tables
 To simplify customer lifecycle analysis, 3 reusable base tables were created:
@@ -80,8 +76,8 @@ The following customer lifecycle analyses have been carried out:
 
 # Business Insights and Recommendations
 Business insights and recommendations are available in:
-- Business_Insights.md
-- Recommendations.md
+- [View Business Insights](Docs/Business_insights.png)
+- [View Recommendations](Docs/Recommendations.png)
 # Conclusion
 
 The analysis shows that the retailer has a valuable repeat-purchasing customer base, but business performance is unevenly distributed. A relatively small group of Champions, Loyal customers, and VIP customers generates a large share of revenue, while almost half of the observed customer base is classified as churned.

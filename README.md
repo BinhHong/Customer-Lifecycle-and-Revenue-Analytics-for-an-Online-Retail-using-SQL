@@ -34,7 +34,7 @@ Attribute Information:
 - Country: The name of the country where a customer resides.
 
 # Tools and SQL Techniques
-- MySQL 8.0
+- MySQL 8.0 
 - MySQL Workbench
 - JOINs
 - CTEs

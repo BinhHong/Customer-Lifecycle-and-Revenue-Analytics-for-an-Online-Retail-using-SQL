@@ -49,7 +49,7 @@ Attribute Information:
 ## Data Preparation
 The data preparation includes 3 careful and detailed steps:
 - [Raw Data Setup and Validation](SQL%20codes/00_raw_data_validation.sql)
-- [Data Quality Assessment](SQL%20codes/01_data_quality.sql)
+- [Data Quality Assessment](SQL%20codes/01_data_quality.sql) and [Data Quality Report](Docs/data_quality_report.md)
 - [Data Cleaning and Transformation](SQL%20codes/02_data_cleaning.sql)
 ## Data Modelling
 A star schema was implemented to support customer lifecycle analytics.

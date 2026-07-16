@@ -1,11 +1,10 @@
 # Customer Lifecycle Analytics for an Online Retailer using SQL
 
 # Executive Summary
-This project develops a complete SQL-based customer lifecycle analytics framework using the Online Retail II dataset.
 
-Starting from raw transactional data, the project performs data validation, data quality assessment, cleaning, dimensional modelling, and customer analytics to understand customer behaviour, retention, segmentation, and historical customer lifetime value.
+This project develops a complete SQL-based customer lifecycle analytics framework using the Online Retail II dataset. Starting from raw transactional data, the project performs data validation, data quality assessment, data cleaning, star schema modelling, and customer analytics to understand customer behaviour throughout the customer lifecycle.
 
-The analysis identifies key customer segments, evaluates customer retention through cohort analysis, measures churn, and provides actionable business recommendations to improve long-term customer value.
+The analysis focuses on customer acquisition, engagement, retention, segmentation, and historical customer lifetime value (CLV). The objective is to move beyond transactional reporting and provide actionable business insights and recommendations that support customer-centric decision-making.
 
 # Business and Data Understanding
 
@@ -34,18 +33,6 @@ Attribute Information:
 - CustomerID: A 5-digit integral number uniquely assigned to each customer.
 - Country: The name of the country where a customer resides.
 
-# Project Objectives
-
-This project aims to build a SQL-based analytics framework to evaluate customer behavior through customer lifecycle analysis. The project focuses on the following analytical perspectives:
-
-* Customer behavior and purchasing patterns
-* Customer retention and churn
-* Cohort analysis
-* Customer segmentation using RFM and behavioral analysis
-* Customer lifecycle analytics
-* Customer lifetime value analysis (CLV)
-
-The objective is to move beyond transactional reporting and develop a customer-centric analytical framework that supports business decision-making.
 # Tools and SQL Techniques
 - MySQL 8.0
 - MySQL Workbench
@@ -71,9 +58,13 @@ A star schema was implemented to support customer lifecycle analytics.
 - dim_products stores product attributes.
 - dim_date supports time-based analysis and cohort calculations.
 
-![Data Model](Images/model.png?raw=true)
+## Data Model
 
-## Creating base tables
+The star schema used in this project is available in the **Data Model** folder.
+
+➡️ [View Data Model Diagram](Images/model.png)
+
+## Analytical base tables
 To simplify customer lifecycle analysis, 3 reusable base tables were created:
 - base transactions
 - base customers

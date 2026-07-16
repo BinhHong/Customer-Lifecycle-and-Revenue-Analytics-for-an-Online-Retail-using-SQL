@@ -43,14 +43,13 @@ FROM base_customers;
   ==================================================*/
   
 -- New customers per month
--- Result: 
 SELECT first_order_month, COUNT(*) AS customer_acquisition
 FROM base_customers
 GROUP BY first_order_month
 ORDER BY first_order_month;
 
 -- Month with highest acquisition
--- Result: 2009-12 with 951 new customers
+-- Result: March 2010 with 441 customers (December 2009 is excluded)
 WITH monthly_acquisition AS
 (SELECT first_order_month, COUNT(*) AS customer_acquisition
 FROM base_customers
